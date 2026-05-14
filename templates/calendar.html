@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>📅 Habit Calendar</h1>
+
+<!-- Habit stats -->
+<p>🔥 Current streak: {{ streak }} days</p>
+<p>✅ Total completed: {{ get_total_completed(habit_id) }} days</p>
+
+
+<style>
+    .calendar table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .calendar th,
+    .calendar td {
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 10px;
+        width: 14.28%;
+        /* 7 columns evenly */
+    }
+
+    .calendar td.done {
+        background-color: #5b69ff;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .calendar td.empty {
+        background-color: #f0f0f0;
+    }
+
+    .calendar a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .calendar a:hover {
+        background-color: #e0e0e0;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background-color: #5b69ff;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #4a57d4;
+    }
+</style>
+
+<div class="calendar">
+    <table>
+        <thead>
+            <tr>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Sun</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in cal %}
+            <tr>
+                {% for day in week %}
+                {% if day == 0 %}
+                <td class="empty"></td>
+                {% elif day in records %}
+                <td class="done">{{ day }}</td>
+                {% else %}
+                <td>
+                    <a href="/mark/{{ habit_id }}/{{ day }}">{{ day }}</a>
+                </td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="/dashboard">
+    <button type="button">⬅ Back to Dashboard</button>
+</a>
+
+{% endblock %}

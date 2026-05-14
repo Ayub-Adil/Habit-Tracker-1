@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>🔥 Dashboard</h1>
+
+<style>
+    html,
+    body {
+        height: auto;
+        /* allow content to grow */
+        min-height: 100%;
+        /* ensure full page */
+        overflow-y: auto;
+        /* allow vertical scroll */
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+    }
+
+    input,
+    button {
+        pointer-events: auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+    }
+
+    .card b {
+        font-size: 18px;
+        color: #222;
+    }
+
+    .card p {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+    form input,
+    form button {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    form button {
+        background-color: #5b69ff;
+        color: #fff;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #4a57d4;
+    }
+
+    .progress-bar {
+        background: #eee;
+        border-radius: 6px;
+        overflow: hidden;
+        height: 12px;
+        margin: 10px 0;
+    }
+
+    .progress-fill {
+        background: #5b69ff;
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+
+    button {
+        background-color: #5b69ff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        margin-top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background-color: #4a57d4;
+    }
+
+    a button {
+        width: 100%;
+    }
+
+    form button.delete {
+        background-color: #e74c3c;
+        color: #fff;
+    }
+
+    form button.delete:hover {
+        background-color: #c0392b;
+    }
+</style>
+
+<!-- Add Habit Form -->
+<div class="card">
+    <form method="POST" action="/add">
+        <input type="text" name="name" placeholder="Habit" required>
+        <input type="number" name="goal" placeholder="Goal (days)" required>
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+<!-- Habit List -->
+{% for h in habits %}
+<div class="card">
+    <b>{{ h[2] }}</b>
+
+    <p>🔥 Streak: {{ get_streak(h[0]) }} days</p>
+    <p>🔥 Current streak: {{ get_current_streak(h[0]) }} days</p>
+    <p>🏅 Longest streak: {{ get_longest_streak(h[0]) }} days</p>
+    <p>✅ Total completed: {{ get_total_completed(h[0]) }} days</p>
+    <p>🏆 {{ get_achievement(get_streak(h[0])) }}</p>
+
+    <div class="progress-bar">
+        <!-- Inline Jinja for width -->
+        <div class="progress-fill" style="width: {{ get_progress(h[0], h[3]) }}%"></div>
+    </div>
+
+    <a href="/calendar/{{ h[0] }}">
+        <button type="button">Track</button>
+    </a>
+
+    <!-- Delete Habit Button -->
+    <div>
+        <form method="POST" action="/delete/{{ h[0] }}" style="margin-top:10px;">
+            <button type="submit" style="background-color:#e74c3c;">Delete</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Analytics -->
+<a href="/charts">
+    <button type="button">Analytics</button>
+</a>
+
+{% endblock %}

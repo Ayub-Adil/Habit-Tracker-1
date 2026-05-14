@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>📊 Analytics</h1>
+
+<!-- Weekly Chart -->
+<canvas id="weekly"></canvas>
+
+<!-- Monthly Chart -->
+<canvas id="monthly"></canvas>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Weekly chart
+fetch("/weekly")
+  .then(r => r.json())
+  .then(data => {
+    new Chart(document.getElementById("weekly"), {
+      type: "line",
+      data: {
+        labels: Object.keys(data),
+        datasets: [{
+          label: "Weekly Progress",
+          data: Object.values(data),
+          borderColor: "blue",
+          backgroundColor: "lightblue",
+          fill: false
+        }]
+      }
+    });
+  });
+
+// Monthly chart
+fetch("/monthly")
+  .then(r => r.json())
+  .then(data => {
+    new Chart(document.getElementById("monthly"), {
+      type: "bar",
+      data: {
+        labels: Object.keys(data),
+        datasets: [{
+          label: "Monthly Progress",
+          data: Object.values(data),
+          backgroundColor: "orange"
+        }]
+      }
+    });
+  });
+</script>
+
+<!-- Back to Dashboard -->
+<a href="/dashboard">
+  <button type="button">Back</button>
+</a>
+
+{% endblock %}
