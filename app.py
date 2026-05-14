@@ -295,7 +295,3 @@ def monthly():
 @app.route("/charts")
 def charts():
     return render_template("charts.html")
-
-# ---------------- RUN ----------------
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
